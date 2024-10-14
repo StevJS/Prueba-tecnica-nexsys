@@ -8,6 +8,7 @@ import org.nexsys.marketplace.converter.ProductoPlatziResponseToProductoNexsysDT
 import org.nexsys.marketplace.dto.ProductoNexsysDTO;
 import org.nexsys.marketplace.entity.ProductoNexsys;
 import org.nexsys.marketplace.exception.ProductoCreationException;
+import org.nexsys.marketplace.helper.PlatziRestConsumerHelper;
 import org.nexsys.marketplace.request.ProductoNexsysRequest;
 import org.nexsys.marketplace.response.ProductoPlatziResponse;
 import org.nexsys.marketplace.repository.IProductoRepository;
@@ -31,16 +32,14 @@ public class ProductoNexsysServiceImpl implements IProductoNexsysService {
     private final RestTemplate restTemplate;
     private final ProductoPlatziResponseToProductoNexsysDTO productoConverter;
     private final ProductoNexsysMapper productoNexsysMapper;
-
-    @Value("${api.productos.url}")
-    private String apiUrl;
+    private final PlatziRestConsumerHelper helper;
 
     @Override
     @Transactional
     public List<ProductosResponse> getAllProductoNexsys() {
         try {
-            ProductoPlatziResponse[] productsArray = restTemplate.getForObject(apiUrl, ProductoPlatziResponse[].class);
-            saveDataPlatziResponse(productsArray);
+            List<ProductoPlatziResponse> products = helper.getProductosFromPlatzi();
+            saveDataPlatziResponse(products.toArray(new ProductoPlatziResponse[0]));
 
             return productoRepository.findAll().stream()
                     .map(productoConverter::convertToProductosResponse)
@@ -52,7 +51,7 @@ public class ProductoNexsysServiceImpl implements IProductoNexsysService {
     }
 
     @Transactional
-     void saveDataPlatziResponse(ProductoPlatziResponse[] productsArray) {
+    void saveDataPlatziResponse(ProductoPlatziResponse[] productsArray) {
         if (productsArray != null && productsArray.length > 0) {
             for (ProductoPlatziResponse platziProduct : productsArray) {
                 Optional<ProductoNexsys> existingProduct = productoRepository.findById(platziProduct.getId());
