@@ -2,7 +2,7 @@ package org.nexsys.marketplace.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nexsys.marketplace.converter.CategoriaPlatziResponseToCategoriaDTO;
+import org.nexsys.marketplace.mapper.CategoriaPlatziResponseToCategoriaDTO;
 import org.nexsys.marketplace.dto.CategoriaDTO;
 import org.nexsys.marketplace.helper.PlatziRestConsumerHelper;
 import org.springframework.stereotype.Service;

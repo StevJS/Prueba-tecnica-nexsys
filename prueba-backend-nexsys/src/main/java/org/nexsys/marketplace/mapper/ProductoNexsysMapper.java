@@ -1,4 +1,4 @@
-package org.nexsys.marketplace.converter;
+package org.nexsys.marketplace.mapper;
 
 import org.nexsys.marketplace.entity.ProductoNexsys;
 import org.nexsys.marketplace.request.ProductoNexsysRequest;
